@@ -115,44 +115,86 @@ const zipInputElement = document.querySelector('#zip');
 const cvvInputElement = document.querySelector('#cvv');
 const formElement = document.querySelector("form");
 
+
+
 /* Validation Pass Function */
 const validationPass = (element) => {
-
     const parent = element.parentElement;
     parent.classList.add('valid');
     parent.classList.remove('not-valid');
-    parent.lastElementChild.classList.add("hint"); 
+    parent.lastElementChild.style.display = 'none'; 
 }
 
 /* Validation Fail Function */
 const validationFail = (element) => {
-
     const parent = element.parentElement;
     parent.classList.add('not-valid');
     parent.classList.remove('valid');
-    parent.lastElementChild.classList.remove("hint");
+    if (element === nameInputElement){
+        if (!element.value){
+            parent.lastElementChild.style.display = 'inherit';
+            parent.lastElementChild.innerHTML = `Name: field cannot be blank`;
+        } else {
+            parent.lastElementChild.style.display = 'inherit'
+            parent.lastElementChild.innerHTML = `Formatting Issue`;
+        }
+    } else if (element === emailAddressInputElement ){
+        if (!element.value){
+            parent.lastElementChild.style.display = 'inherit';
+            parent.lastElementChild.innerHTML = `Email Address: field cannot be blank`;
+        } else {
+            parent.lastElementChild.style.display = 'inherit';
+            parent.lastElementChild.innerHTML = `Email address must be formatted correctly`;
+        }
+    } else {
+        parent.lastElementChild.style.display = 'inherit'
+    }
 }
+
+/* Validation Fail Function */
+const validationNameFail = (element) => {
+    const parent = element.parentElement;
+    parent.classList.add('not-valid');
+    parent.classList.remove('valid');
+    parent.lastElementChild.innerHTML = 'Formatting issue.';
+}
+
 
 /* Helper function to validate name input */
 const nameValidator = () => {
     const nameValue = nameInputElement.value.trim();
     console.log("Name value is: ", `"${nameValue}"`);
-    const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*?.? ?[a-zA-Z]*?$/.test(nameValue);
+    const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*?.? ?[a-zA-Z]*?$/i.test(nameValue);
     console.log(`Name validation test on "${nameValue}" evaluates to ${nameIsValid}`);
+
+    if (nameIsValid === true){
+        validationPass(nameInputElement)
+    } else {
+        validationFail(nameInputElement);
+    }
 
     return nameIsValid;
 }
+nameInputElement.addEventListener('keyup', nameValidator);
 
 /* Helper function to validate email input */
 const emailValidator = () => {
     const emailValue = emailAddressInputElement.value.trim();
     console.log("Email value is: ", `"${emailValue}"`);
     // From https://emailregex.com/
-    const emailIsValid = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emailValue);
+    const emailIsValid = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i.test(emailValue);
     console.log(`Email validation test on "${emailValue}" evaluates to ${emailIsValid}`);
+
+    if (emailIsValid === true){
+        validationPass(emailAddressInputElement);
+    }
+    else {
+        validationFail(emailAddressInputElement);
+    }
 
     return emailIsValid;
 }
+emailAddressInputElement.addEventListener('keyup', emailValidator);
 
 /* Helper function to validate Register for Activities section */
 const registerForActivitiesValidator = () => {
@@ -164,34 +206,58 @@ const registerForActivitiesValidator = () => {
 
 /* Helper function to validate a creadit card number */
 const creditCardNumberValidator = () => {
-    const ccNumValue = ccNumInputElement.value.trim();
+    const ccNumValue = +ccNumInputElement.value.trim();
     console.log("Credit Card number value is: ",`"${ccNumValue}"`);
     // From https://www.geeksforgeeks.org/how-to-validate-visa-card-number-using-regular-expression/
-    const ccNumIsValid = /^4[0-9]{12}(?:[0-9]{3})?$/.test(ccNumValue);
+    const ccNumIsValid = /^\d{13,16}$/i.test(ccNumValue);
     console.log(`Credit Card number validation test on "${ccNumValue}" evaluates to ${ccNumIsValid}`)
+
+    if (ccNumIsValid === true){
+        validationPass(ccNumInputElement);
+    }
+    else {
+        validationFail(ccNumInputElement);
+    }
 
     return ccNumIsValid;
 }
+ccNumInputElement.addEventListener('keyup', creditCardNumberValidator);
 
 /* Helper function to validate Zip Code input */
 const zipCodeValidator = () => {
-    const zipCodeValue = zipInputElement.value.trim();
+    const zipCodeValue = +zipInputElement.value.trim();
     console.log("Zip Code value is: ", `"${zipCodeValue}"`);
-    const zipCodeIsValid = /^\d{5}(-\d{4})?$/.test(zipCodeValue);
+    const zipCodeIsValid = /^\d{5}(-\d{4})?$/i.test(zipCodeValue);
     console.log(`Zip Code validation test on "${zipCodeValue}" evaluates to ${zipCodeIsValid}`);
+
+    if (zipCodeIsValid === true){
+        validationPass(zipInputElement);
+    }
+    else {
+        validationFail(zipInputElement);
+    }
 
     return zipCodeIsValid;
 }
+zipInputElement.addEventListener('keyup', zipCodeValidator);
 
 /* Helper function to validate CVV input */
 const cvvValidator = () => {
-    const cvvValue = cvvInputElement.value.trim();
+    const cvvValue = +cvvInputElement.value.trim();
     console.log("CVV value is: ", `"${cvvValue}"`);
-    const cvvIsValid = /^[0-9]{3}$/.test(cvvValue);
+    const cvvIsValid = /^\d{3}$/i.test(cvvValue);
     console.log(`CVV validation test on "${cvvValue}" evaluates to ${cvvIsValid}`);
+
+    if (cvvIsValid === true){
+        validationPass(cvvInputElement);
+    }
+    else {
+        validationFail(cvvInputElement);
+    }
 
     return cvvIsValid;
 }
+cvvInputElement.addEventListener('keyup', cvvValidator);
 
 formElement.addEventListener('submit', e => {
      e.preventDefault();

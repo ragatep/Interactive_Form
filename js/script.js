@@ -39,7 +39,7 @@ const formElement = document.querySelector("form");
 
 /* On page load */
 nameInputElement.focus(); // 3. The "Name" field:
-// formElement.reset(); // Resets form on page refresh. 
+formElement.reset(); // Resets form on page refresh. 
 
 /* Attributes */
 jobRoleInputElement.hidden = true; // 4. "Job Role" section:

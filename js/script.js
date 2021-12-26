@@ -39,7 +39,7 @@ const formElement = document.querySelector("form");
 
 /* On page load */
 nameInputElement.focus(); // 3. The "Name" field:
-formElement.reset(); // Resets form on page refresh. 
+// formElement.reset(); // Resets form on page refresh. 
 
 /* Attributes */
 jobRoleInputElement.hidden = true; // 4. "Job Role" section:
@@ -193,7 +193,7 @@ const creditCardNumberValidator = () => {
 	const ccNumValue = +ccNumInputElement.value.trim();
 	// console.log("Credit Card number value is: ",`"${ccNumValue}"`);
 	// From https://www.geeksforgeeks.org/how-to-validate-visa-card-number-using-regular-expression/
-	const ccNumIsValid = /^\d{13,16}$/i.test(ccNumValue);
+	const ccNumIsValid = /^\d{13,16}$/.test(ccNumValue);
 	// console.log(`Credit Card number validation test on "${ccNumValue}" evaluates to ${ccNumIsValid}`)
 	ccNumIsValid === true ?
 		validationPass(ccNumInputElement) :
